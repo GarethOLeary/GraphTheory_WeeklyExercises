@@ -41,4 +41,3 @@ print(r)
 s = [i*i for i in r]
 
 print(s)
-
