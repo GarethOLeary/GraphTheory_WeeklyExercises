@@ -17,41 +17,40 @@ def shunt(infix):
             # Push it to the output
             postfix = postfix + c
         # c is an operator 
-        else if c in {'+', '-', '*', '/'}:
-        # Check what is on the stack
-        while len(stack) > 0 and prec[stack[-1]] > prec(c) and stack[-1] != '(':
-            # Append operator at the top of stack to output
-            postfix = postfix + stack[-1]
-            # Remove operator from stack
+        elif c in {'+', '-', '*', '/'}:
+            # Check what is on the stack
+            while len(stack) > 0 and stack[-1] != '(' and prec[stack[-1]] > prec[c]:
+                # Append operator at the top of stack to output
+                postfix = postfix + stack[-1]
+                # Remove operator from stack
+                stack = stack[:-1]
+            # Push c to stack
+            stack = stack + c
+        elif c == '(':
+             # Push c to stack
+             stack = stack + c
+        elif c == ')':
+            while stack[-1] != "(":
+                # Append operator at the top of stack to output
+                postfix = postfix + stack[-1]
+                # Remove operator from stack
+                stack = stack[:-1]
+            # Remove open bracket from stack
             stack = stack[:-1]
-        # Push c to stack
-        stack = stack + c
-
-
-    
-    
-                
-    #    */ else if the token is a left parenthesis (i.e. "("), then:
-    #         push it onto the operator stack.
-    #     else if the token is a right parenthesis (i.e. ")"), then:
-    #         while the operator at the top of the operator stack is not a left parenthesis:
-    #             pop the operator from the operator stack onto the output queue.
-    #         /* If the stack runs out without finding a left parenthesis, then there are mismatched parentheses. */
-    #         if there is a left parenthesis at the top of the operator stack, then:
-    #             pop the operator from the operator stack and discard it
-    #         if there is a function token at the top of the operator stack, then:
-    #             pop the function from the operator stack onto the output queue.
-    # /* After while loop, if operator stack not null, pop everything to output queue */
-    # if there are no more tokens to read then:
-    #     while there are still operator tokens on the stack:
-    #         /* If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses. */
-    #         pop the operator from the operator stack onto the output queue.
-    # exit.
+    #Empty the operator stack
+    while len(stack) != 0:
+        # Append operator at the top of stack to output
+        postfix = postfix + stack[-1]
+        # Remove operator from stack
+        stack = stack[:-1]
     return postfix
 
 
-infix = "3+4×(2−1)"
-postfix = "3421−×+"
+for infix in ["3+4*(2-1)", "1+2+3+4+5*6", "(1+2)*(4*(6-7))"]:
+    print(f"infix: {infix}")
+    print(f"postfix: {shunt(infix)}")
+    print()
 
-if shunt(infix) == postfix:
-    print("It seems to work.")
+
+
+
